@@ -9,6 +9,7 @@ pub use self::vault::VaultManager;
 mod vault {
 
     use alloc::string::String;
+    use alloc::format;
 
     use ink_storage::{
         collections::HashMap as StorageHashMap,
