@@ -163,8 +163,10 @@ mod vault {
             let caller = self.env().caller();
 
             let  auth = self.get_auth_by_address(self.auth_contract_address);
+            let contract_name = "vault".to_string();
+            let function_name = "add_vault_token".to_string();
 
-            let is_permission = auth.has_permission(caller,"vault".to_string(),"add_vault_token".to_string());
+            let is_permission = auth.has_permission(caller,contract_name, function_name);
 
             if is_permission == false {
                 return false;
