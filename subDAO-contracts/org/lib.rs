@@ -171,7 +171,8 @@ mod org {
         pub fn add_dao_moderator(&mut self,name:String,moderator: AccountId) -> bool  {
             let caller = self.env().caller();
 
-            if &caller != & self.owner {
+            
+            if caller != self.owner {
                 return false;
             }
 
@@ -212,7 +213,7 @@ mod org {
 
             let caller = self.env().caller();
 
-            if &caller != & self.owner {
+            if caller !=  self.owner {
                 return false;
             }
 
@@ -271,7 +272,7 @@ mod org {
             let caller = self.env().caller();
 
             // only owner can transfer the ownership of the org
-            if &caller != & self.owner {
+            if caller != self.owner {
                 return false;
             }
 
@@ -300,12 +301,12 @@ mod org {
 
                 let moderator_list = self.get_dao_moderator_list();
 
-                if &caller == &self.owner {
+                if caller == self.owner {
                     return true;
                 }
                 for key in moderator_list {
                     let moderator = key;
-                    if &caller == &moderator {
+                    if caller == moderator {
                         return true;
                     }
                 }
