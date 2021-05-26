@@ -98,6 +98,7 @@ mod org {
                 owner:_owner,
                 moderators: StorageHashMap::default(),
                 members: StorageHashMap::default(),
+                applying_members: StorageHashMap::default(),
             }
         }
 
@@ -327,11 +328,12 @@ mod org {
             if self.applying_members.contains_key(&member) {
                 self.add_dao_member(name,member);
                 self.applying_members.take(&member);
+                let org_id = self.org_id;
 
                 self.env().emit_event(ApproveDAOMemberEvent{
                     member,
                     org_id,
-                    caller,
+                    self.env().caller(),
                 });
 
                 return true;
