@@ -326,6 +326,7 @@ mod org {
             }
 
             if self.applying_members.contains_key(&member) {
+                let caller_new = self.env().caller();
                 self.add_dao_member(name,member);
                 self.applying_members.take(&member);
                 let org_id = self.org_id;
@@ -333,7 +334,7 @@ mod org {
                 self.env().emit_event(ApproveDAOMemberEvent{
                     member,
                     org_id,
-                    self.env().caller(),
+                    caller_new,
                 });
 
                 return true;
