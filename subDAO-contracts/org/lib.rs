@@ -334,7 +334,7 @@ mod org {
                 self.env().emit_event(ApproveDAOMemberEvent{
                     member,
                     org_id,
-                    caller_new,
+                    approver:caller_new,
                 });
 
                 return true;
