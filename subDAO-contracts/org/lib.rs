@@ -277,75 +277,72 @@ mod org {
             self.owner = new_owner;
             return true;
         }
-    }
-
-    #[ink(message)]
-    pub fn apply_member(&mut self,name:String,member: AccountId) -> bool {
-
-
-
-        match self.applying_members.insert(member,name) {
-            Some(_) => { false},
-            None => {
-                let org_id = self.org_id;
-                self.env().emit_event(ApplyDAOMemberEvent{
-                    member,
-                    org_id,
-                });
-                true
+        #[ink(message)]
+        pub fn apply_member(&mut self,name:String,member: AccountId) -> bool {
+            match self.applying_members.insert(member,name) {
+                Some(_) => { false},
+                None => {
+                    let org_id = self.org_id;
+                    self.env().emit_event(ApplyDAOMemberEvent{
+                        member,
+                        org_id,
+                    });
+                    true
+                }
             }
-        }
 
-    }
+        }
 
 
    
-    pub fn check_authority(&self, caller:AccountId) -> bool {
+        pub fn check_authority(&self, caller:AccountId) -> bool {
 
-            let moderator_list = self.get_dao_moderator_list();
+                let moderator_list = self.get_dao_moderator_list();
 
-            if &caller == &self.owner {
-                return true;
-            }
-            for key in moderator_list {
-                let moderator = key;
-                if &caller == &moderator {
+                if &caller == &self.owner {
                     return true;
                 }
-            }
-            return false;
+                for key in moderator_list {
+                    let moderator = key;
+                    if &caller == &moderator {
+                        return true;
+                    }
+                }
+                return false;
 
-    }
-
-
-    #[ink(message)]
-    pub fn approve_member(&mut self,name:String,member: AccountId) -> bool {
-
-        let caller = self.env().caller();
-
-        let can_operate = self.check_authority(caller);
-
-        if can_operate == false {
-            return false;
         }
 
-        if self.applying_members.contains_key(&member) {
-            self.add_dao_member(name,member);
-            self.applying_members.take(&member);
 
-            self.env().emit_event(ApproveDAOMemberEvent{
-                member,
-                org_id,
-                caller,
-            });
+        #[ink(message)]
+        pub fn approve_member(&mut self,name:String,member: AccountId) -> bool {
 
-            return true;
-        };
-        return false;
+            let caller = self.env().caller();
+
+            let can_operate = self.check_authority(caller);
+
+            if can_operate == false {
+                return false;
+            }
+
+            if self.applying_members.contains_key(&member) {
+                self.add_dao_member(name,member);
+                self.applying_members.take(&member);
+
+                self.env().emit_event(ApproveDAOMemberEvent{
+                    member,
+                    org_id,
+                    caller,
+                });
+
+                return true;
+            };
+            return false;
+
+        }
 
     }
 
-
+        
     
 
 
