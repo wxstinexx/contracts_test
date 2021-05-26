@@ -163,15 +163,12 @@ mod vault {
             let caller = self.env().caller();
 
             let  auth = self.get_auth_by_address(self.auth_contract_address);
-            let contract_name = Box::new("vault").to_string();
-            let function_name = Box::new("add_vault_token").to_string();
-
-            let is_permission = auth.has_permission(caller,contract_name, function_name);
+            
+            let is_permission = auth.has_permission(caller,"vault".to_string(),"add_vault_token".to_string());
 
             if is_permission == false {
                 return false;
             }
-
 
             match self.tokens.insert(
                                      erc_20_address,self.vault_contract_address
